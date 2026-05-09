@@ -1,0 +1,28 @@
+# Writers Room — local-only files (do NOT commit)
+
+# Personal configuration overlays
+config.yml
+config.local.yml
+
+# Personal feedback log (only feedback.md.example ships)
+feedback.md
+
+# Auto-generated custom modes — only the starter mode `informational-article.yml` is shipped.
+# Any new modes the skill auto-creates on a user's machine stay private to that user.
+modes/*.yml
+!modes/informational-article.yml
+
+# Python bytecode / venv
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# OS junk
+.DS_Store
+Thumbs.db
+
+# Editor scratch
+.vscode/
+.idea/
+*.swp

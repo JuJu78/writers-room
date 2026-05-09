@@ -1,0 +1,56 @@
+# informational-article — base mode (ships with Writers Room)
+#
+# This is the default editorial mode: a structured SEO blog post with an inverted-pyramid
+# layout, sober length policy, and a link policy biased toward internal linking. It is
+# selected when no other mode's triggers match the user's prompt.
+#
+# Mode files use the same schema everywhere: triggers + overrides + plan_addendum + writer_addendum.
+# Custom modes generated on the fly (tutorial, news, listicle, etc.) follow the same shape.
+
+name: informational-article
+display_name: "Informational article"
+description: >
+  Structured informational article in classic SEO style. Inverted pyramid, each section's first
+  sentence is the key idea, 3–5 internal links, optional closing FAQ, expert-pedagogical tone.
+  Fits about 80% of B2B blog articles.
+
+triggers:
+  patterns:
+    - '(?i)\b(article (informationnel|seo|de blog|complet|publiable))\b'
+    - '(?i)\b(complete|publishable|publish.ready|seo|informational) article\b'
+    - '(?i)\b(blog post|billet de blog)\b'
+  keywords:
+    - "informational"
+    - "seo"
+    - "blog post"
+    - "billet"
+    - "article complet"
+
+# Overrides merged on top of base config.yml. Mode wins on conflicts.
+overrides:
+  length:
+    max_paragraph_words: 100
+    max_sentence_words: 30
+    target_total_words: [1200, 1800]
+  links:
+    internal_min: 3
+    internal_max: 5
+    external_max: 3
+    internal_must_exceed_external: true
+  style:
+    first_sentence_is_topic_sentence: true
+    banned_subheadings:
+      - "Introduction"
+      - "Conclusion"
+      - "Intro"
+      - "Outro"
+
+plan_addendum: |
+  Use the inverted-pyramid structure. Each H2 section's first sentence states the idea most
+  important to the section. Suggest a closing FAQ only when recurring real questions exist
+  on the topic; otherwise close with a strong synthesis paragraph or an action list.
+
+writer_addendum: |
+  Default mode. Apply the base style and structure rules without modifications.
+  Open the article with a one-paragraph hook that names the problem and the thesis.
+  Each section opens with its key idea.

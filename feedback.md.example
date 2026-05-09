@@ -1,0 +1,57 @@
+# Writers Room — feedback log
+
+This file is the long-term editorial memory for your project. It is **read by the Coordinator
+at the start of every run** and **appended to at the end** with the user's review.
+
+The Coordinator does NOT auto-apply entries as hard rules. It propagates them as soft
+preferences to the relevant sub-agents (Writer, Style, Plan, Linking).
+
+When a similar entry appears 3+ times, you should **manually promote** it to a hard rule in
+`config.yml` (e.g. add a phrase to `style.banned_phrases`, a synonym to
+`style.preferred_lexicon`, shorten `length.max_paragraph_words`, etc.). This separation between
+dynamic feedback and static rules is what makes the skill durably learn without silently
+mutating your editorial config.
+
+Each entry should be dated, anchor a specific article, and stay short. The Coordinator can
+ingest plain prose — there is no schema. The fictional examples below show useful patterns;
+delete them before using the file in production.
+
+---
+
+## 2025-01-15 — Article: "How modern teams ship documentation alongside code"
+
+**Liked**
+- The thesis "documentation is a deployment artifact, not an afterthought" was the right hook.
+- Each section opened with its key idea — the inverted pyramid is being respected.
+- External sources were diverse (no two links pointed to the same domain).
+
+**Change next time**
+- The opening paragraph leaned on the rhetorical pattern "X is no longer Y, it is Z".
+  This pattern has shown up in several recent drafts. Vary the opener.
+- Consider adding a short "what this article does NOT cover" paragraph so readers
+  with adjacent intents (API reference docs, onboarding guides) self-disqualify quickly.
+
+**Stop**
+- Avoid the transition word "concretely" at the start of paragraphs. Already counted twice
+  in the last three articles. If it appears again, promote to `style.banned_phrases`.
+
+---
+
+## 2025-MM-DD — Article: "<next title>"
+
+**Liked**
+- ...
+
+**Change next time**
+- ...
+
+**Stop**
+- ...
+
+---
+
+<!--
+Promotion candidates (manual review before editing config.yml):
+- "concretely" — appeared as a transition opener in 2 of last 3 articles. Watch for a 3rd.
+- (add candidates here as you spot them)
+-->

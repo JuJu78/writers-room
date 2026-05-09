@@ -1,0 +1,132 @@
+# Writers Room — example configuration
+#
+# Copy this file to `config.yml` (in the skill directory or your project root) and override
+# any defaults you want. Writers Room reads it at session start and propagates the relevant
+# slice to each sub-agent.
+#
+# All keys are optional. Remove the ones you don't need; defaults below will apply.
+
+# ----------------------------------------------------------------------------
+# General
+# ----------------------------------------------------------------------------
+
+language: auto                    # fr | en | auto (detect from user input)
+mode: ""                          # leave empty for auto-detection from prompt; or pin to one
+                                  # of: informational-article (the only built-in), or any
+                                  # custom mode you've persisted in modes/
+
+# ----------------------------------------------------------------------------
+# Modes — self-extending catalog of article types
+# ----------------------------------------------------------------------------
+
+modes:
+  catalog_dir: "modes"            # subdir of skill folder; each <name>.yml file is a mode
+  default: informational-article  # used when no mode triggers match the user's prompt
+  on_unknown: ask_to_create       # ask_to_create | use_default | error
+                                  #   ask_to_create  → generate candidate YAML, present it, await user choice
+                                  #   use_default    → silent fallback to `default`
+                                  #   error          → abort with explanation
+  persist_new_modes: ask          # ask | always | never
+                                  #   ask     → confirmation step before writing modes/<name>.yml (recommended)
+                                  #   always  → write immediately (skips confirmation, risky)
+                                  #   never   → activate for the current run only, never persist
+
+# ----------------------------------------------------------------------------
+# Voice — how the article speaks to the reader
+# ----------------------------------------------------------------------------
+
+voice:
+  pronoun: you-formal             # you-formal | you-informal | vous | tu | none
+  perspective: second-person      # first-person | second-person | third-person
+  tone: expert-pedagogical        # expert-pedagogical | friendly | journalistic | neutral
+
+# ----------------------------------------------------------------------------
+# Length — structural readability limits (overridable per mode)
+# ----------------------------------------------------------------------------
+
+length:
+  max_paragraph_words: 100
+  max_sentence_words: 30
+  target_total_words: [800, 2000] # min, max — used by Plan and Writing agents
+
+# ----------------------------------------------------------------------------
+# Linking policy (overridable per mode)
+# ----------------------------------------------------------------------------
+
+links:
+  internal_min: 3
+  internal_max: 5
+  external_max: 3
+  internal_must_exceed_external: true
+  one_link_per_paragraph: true    # max one internal AND max one external per paragraph
+
+# ----------------------------------------------------------------------------
+# Style — banned and preferred patterns (overridable per mode)
+# ----------------------------------------------------------------------------
+
+style:
+  banned_chars: []                # e.g. ["—", "–"] to forbid em-dash and en-dash
+  banned_phrases: []              # arbitrary phrases the model must not produce
+                                  # e.g. ["in conclusion", "in today's world", "it goes without saying"]
+  preferred_lexicon: []           # transition phrases the writer should favor
+                                  # e.g. ["concretely", "in practice", "put differently"]
+  first_sentence_is_topic_sentence: true  # enforce inverted-pyramid: first sentence = key idea
+  banned_subheadings:             # subheadings that must never appear at first or last position
+    - "Introduction"
+    - "Conclusion"
+    - "Intro"
+    - "Outro"
+
+# ----------------------------------------------------------------------------
+# SEO — publication metadata generation
+# ----------------------------------------------------------------------------
+
+seo:
+  generate_title_max_chars: 60
+  generate_meta_max_chars: 160
+  generate_slug: true
+
+# ----------------------------------------------------------------------------
+# Site — required for internal linking, otherwise the skill asks
+# ----------------------------------------------------------------------------
+
+site:
+  base_url: ""                    # e.g. "https://example.com" — required to insert internal links
+  sitemap_url: ""                 # optional; defaults to {base_url}/sitemap.xml
+  internal_pages: []              # optional explicit list of URLs the linking agent can use
+
+# ----------------------------------------------------------------------------
+# Feedback — let the skill learn from past runs
+# ----------------------------------------------------------------------------
+
+feedback:
+  enabled: true                   # read at start, append at end
+  path: "feedback.md"             # relative to workspace; defaults to ./feedback.md
+  read_at_start: true             # the Coordinator loads feedback.md before any agent dispatch
+  append_at_end: true             # the Coordinator asks the user for feedback at delivery and appends it
+  promotion_hint_threshold: 3     # when a similar feedback appears N times, suggest promoting it to a config rule
+
+# ----------------------------------------------------------------------------
+# Design — visual style for the HTML output
+# ----------------------------------------------------------------------------
+
+design:
+  reference_type: default         # default | css_file | html_file | screenshot | url
+  reference_path: ""              # path to a .css / .html / image file, or an absolute URL
+                                  #
+                                  # default     → use the editorial-neutral default CSS shipped with the skill
+                                  # css_file    → inline this CSS file as-is
+                                  # html_file   → an existing page from your site whose look should be matched
+                                  # screenshot  → PNG/JPG/WebP of a page whose visual language should be matched
+                                  # url         → fetch this URL and match its visual language
+
+# ----------------------------------------------------------------------------
+# Output — what the skill writes to disk
+# ----------------------------------------------------------------------------
+
+output:
+  format: html-and-markdown       # markdown-only | html-only | html-and-markdown
+  auto_open_html: true            # open the HTML file in the default browser when the session ends
+  filename_prefix: article        # output files: <prefix>.md, <prefix>.html
+  publish_format: markdown        # markdown | hugo-frontmatter | astro-frontmatter
+                                  # only `markdown` is implemented in v1; affects the .md companion only
