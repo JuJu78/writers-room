@@ -25,7 +25,7 @@ Writers Room fixes those failure modes structurally:
 ### Option A — git clone
 
 ```bash
-git clone https://github.com/<your-fork>/writers-room.git ~/.claude/skills/writers-room
+git clone https://github.com/JuJu78/writers-room.git ~/.claude/skills/writers-room
 ```
 
 ### Option B — manual
