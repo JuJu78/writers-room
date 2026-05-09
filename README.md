@@ -60,6 +60,45 @@ If PyYAML is not installed, the verifier falls back to defaults and prints a war
 
 ---
 
+## Use it across Claude Code, Codex CLI, and Gemini CLI
+
+The `SKILL.md` format is portable. All three major CLI agents discover skills the same way — a folder containing `SKILL.md` with a YAML frontmatter (`name` + `description`) — they only differ on where they look for it:
+
+| Tool        | User-scope skills folder                                                                  |
+|-------------|-------------------------------------------------------------------------------------------|
+| Claude Code | `~/.claude/skills/writers-room/`                                                          |
+| Codex CLI   | `~/.agents/skills/writers-room/` ([docs](https://developers.openai.com/codex/skills))     |
+| Gemini CLI  | `~/.gemini/skills/writers-room/` ([docs](https://geminicli.com/docs/cli/skills/))         |
+
+To clone once and have the same skill available in all three, run the install script that symlinks this folder into each location:
+
+```bash
+# macOS / Linux
+git clone https://github.com/JuJu78/writers-room.git
+cd writers-room
+./install.sh
+```
+
+```powershell
+# Windows (PowerShell — symlinks require Developer Mode or an elevated shell)
+git clone https://github.com/JuJu78/writers-room.git
+cd writers-room
+./install.ps1
+```
+
+Or do it manually:
+
+```bash
+git clone https://github.com/JuJu78/writers-room.git ~/code/writers-room
+ln -s ~/code/writers-room ~/.claude/skills/writers-room
+ln -s ~/code/writers-room ~/.agents/skills/writers-room
+ln -s ~/code/writers-room ~/.gemini/skills/writers-room
+```
+
+The trigger detection, role descriptions, mode catalog and verifier transfer cleanly across the three CLIs. A few orchestration details (the exact sub-agent invocation syntax, tool names) may need light adaptation per CLI since each has its own runner — the workshop structure is portable, the precise call shape isn't always.
+
+---
+
 ## Usage
 
 Trigger the skill with one of:
@@ -246,6 +285,18 @@ For richer Markdown features (tables, footnotes), install the `markdown` package
 - Any partial edit that doesn't need a full editorial pipeline
 
 The skill is heavy by design. Triggering it for a one-paragraph fix wastes context.
+
+### Token cost & recommended plans
+
+A full run invokes 13 sub-agents in isolated contexts, three of them run in parallel, and the corrective loop after the verifier may fire up to three times. Plan for **several hundred thousand tokens per publishable article** — sometimes more if the loop triggers repeatedly or if Design Extraction reads a large reference.
+
+Recommended plans:
+
+- **Claude Code** — the **Max** plan is what the skill is sized for. Lower tiers will throttle on long sessions.
+- **Codex CLI** — a paid plan dimensioned to your monthly article volume.
+- **Gemini CLI** — same logic; check your usage tier against the per-article budget above.
+
+Use Writers Room when the article warrants the investment, not for casual edits.
 
 ---
 
